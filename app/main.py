@@ -14,25 +14,13 @@ def move_file(command: str) -> None:
         return
 
     if destination.endswith("/"):
-        final_path = destination + source_path
+        final_path = os.path.join(destination, source_path)
     else:
         final_path = destination
 
-    path_parts = final_path.split("/")
-    directories = path_parts[:-1]
-
-    current_path = ""
-    for directory in directories:
-        if not directory:
-            continue
-
-        if current_path == "":
-            current_path = directory
-        else:
-            current_path += "/" + directory
-
-        if not os.path.exists(current_path):
-            os.mkdir(current_path)
+    dir_path = os.path.dirname(final_path)
+    if dir_path:
+        os.makedirs(dir_path, exist_ok=True)
 
     with open(source_path, "r") as source_file:
         content = source_file.read()
